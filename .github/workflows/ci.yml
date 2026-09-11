@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  packages:
+    name: Test shared packages
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: make test
+
+  apps:
+    name: Build ${{ matrix.app }}
+    runs-on: macos-15
+    strategy:
+      fail-fast: false
+      matrix:
+        # アプリを追加したらここにも名前を足す。
+        app: [UTCJST]
+    steps:
+      - uses: actions/checkout@v4
+      - run: make build APP=${{ matrix.app }} DESTINATION='platform=iOS Simulator,name=iPhone 16'
