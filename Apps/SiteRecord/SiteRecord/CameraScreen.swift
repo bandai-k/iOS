@@ -13,6 +13,7 @@ struct CameraScreen: View {
 
     @State private var board: SiteBoard
     @State private var isEditingBoard = false
+    @State private var isComparing = false
     @State private var isSaving = false
     @State private var message: String?
     @State private var messageTask: Task<Void, Never>?
@@ -58,6 +59,17 @@ struct CameraScreen: View {
                 Self.store.save(edited)
             }
         }
+        .sheet(isPresented: $isComparing) {
+            ComparisonView()
+        }
+        .onChange(of: isComparing) { _, comparing in
+            // 比較画面を開いている間はカメラを止め、戻ったら即再開する。
+            if comparing {
+                camera.stop()
+            } else {
+                camera.start()
+            }
+        }
         .statusBarHidden()
     }
 
@@ -65,9 +77,12 @@ struct CameraScreen: View {
 
     private var controls: some View {
         VStack(spacing: 0) {
-            boardButton
-                .padding(.horizontal, 16)
-                .padding(.top, 8)
+            HStack(spacing: 10) {
+                boardButton
+                compareButton
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
 
             Spacer(minLength: 0)
 
@@ -99,6 +114,19 @@ struct CameraScreen: View {
             .padding(.vertical, 10)
             .background(.black.opacity(0.55), in: Capsule())
         }
+    }
+
+    private var compareButton: some View {
+        Button {
+            isComparing = true
+        } label: {
+            Image(systemName: "rectangle.split.2x1")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.white)
+                .frame(width: 40, height: 40)
+                .background(.black.opacity(0.55), in: Circle())
+        }
+        .accessibilityLabel("施工前後の比較画像を作る")
     }
 
     private var boardPreview: some View {
