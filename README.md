@@ -63,6 +63,7 @@ make test                 # 共有パッケージのテストを全部実行
 - 追加したずれは夏時間を持たない固定のずれとして扱う。都市名はあくまで目安
 - 「編集」で削除。並び順は UTC からのずれが小さい順に自動で揃う。UTC は変換の基準なので消せない
 - 一覧は端末に保存され、次回起動時もそのまま
+- 画面下に広告バナー（AdMob）を出す
 
 変換のロジック（壁時計時刻とタイムゾーンの読み替え、ずれの一覧、一覧の保存）は
 `Packages/ClockCore` 側にあり、単体テストで検証している。
@@ -138,8 +139,24 @@ make test                 # 共有パッケージのテストを全部実行
 - 速度が取れていないときは `--` と「測定中」の案内を出す。停車中の 0 km/h とは区別する
 - トンネルなどで位置情報が 5 秒以上途切れたら、古い速度を出し続けずに「測定中」へ戻す
 - 表示中は画面を自動で消灯させない
+- 画面下に広告バナー（AdMob）を出す
 - 初回起動時に位置情報（使用中のみ）の許可を求める
 
 メーターの目盛り・針の角度・速度の換算・値の鮮度判定は `Packages/SpeedometerCore` 側にあり、
 単体テストで検証している。シミュレータでは `xcrun simctl location <device> start --speed=27.8 …`
 で移動を再現すると動作を確認できる。
+
+## 広告について（Speedometer / TimeZONE）
+
+Google Mobile Ads SDK を Swift Package Manager で入れています
+（`https://github.com/googleads/swift-package-manager-google-mobile-ads.git`）。
+
+- バナーは画面下に固定。高さ 50pt を先に確保してあるので、広告の読み込み前後で画面が動かない
+- いまはアプリ ID・広告ユニット ID とも **Google が公開しているテスト用**。
+  本番配信時は AdMob で発行した値に差し替える
+  - アプリ ID: 各アプリの `Info.plist` の `GADApplicationIdentifier`
+  - 広告ユニット ID: `AdBannerView.testUnitID`
+- `GADApplicationIdentifier` は `GENERATE_INFOPLIST_FILE` が知らないキーなので、
+  `INFOPLIST_FILE` で指定した `Info.plist` に書いている（生成される他のキーとは自動で合成される）
+- 本番配信前には、AdMob の案内にある `SKAdNetworkItems` の追加と、必要なら ATT
+  （`NSUserTrackingUsageDescription`）の対応が別途必要

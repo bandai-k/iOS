@@ -48,8 +48,11 @@ struct SpeedometerScreen: View {
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
 
                 status
+
+                AdBannerSlot()
             }
-            .padding(.vertical, 24)
+            .padding(.top, 24)
+            .padding(.bottom, 8)
         }
         .onAppear {
             provider.start()

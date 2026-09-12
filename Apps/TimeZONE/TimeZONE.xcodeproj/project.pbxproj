@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
         AA0000000000000000000012 /* ClockCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000011 /* ClockCore */; };
+        AA0000000000000000000022 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000021 /* GoogleMobileAds */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
             buildActionMask = 2147483647;
             files = (
                 AA0000000000000000000012 /* ClockCore in Frameworks */,
+                AA0000000000000000000022 /* GoogleMobileAds in Frameworks */,
             );
             runOnlyForDeploymentPostprocessing = 0;
         };
@@ -67,6 +69,7 @@
             name = TimeZONE;
             packageProductDependencies = (
                 AA0000000000000000000011 /* ClockCore */,
+                AA0000000000000000000021 /* GoogleMobileAds */,
             );
             productName = TimeZONE;
             productReference = AA0000000000000000000003 /* TimeZONE.app */;
@@ -99,6 +102,7 @@
             minimizedProjectReferenceProxies = 1;
             packageReferences = (
                 AA0000000000000000000010 /* XCLocalSwiftPackageReference "../../Packages/ClockCore" */,
+                AA0000000000000000000020 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
             );
             preferredProjectObjectVersion = 77;
             productRefGroup = AA0000000000000000000005 /* Products */;
@@ -227,6 +231,7 @@
                 CURRENT_PROJECT_VERSION = 1;
                 ENABLE_PREVIEWS = YES;
                 GENERATE_INFOPLIST_FILE = YES;
+                INFOPLIST_FILE = Info.plist;
                 INFOPLIST_KEY_CFBundleDisplayName = "タイムZONE";
                 INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
                 INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -255,6 +260,7 @@
                 CURRENT_PROJECT_VERSION = 1;
                 ENABLE_PREVIEWS = YES;
                 GENERATE_INFOPLIST_FILE = YES;
+                INFOPLIST_FILE = Info.plist;
                 INFOPLIST_KEY_CFBundleDisplayName = "タイムZONE";
                 INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
                 INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -304,10 +310,26 @@
         };
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+        AA0000000000000000000020 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+            isa = XCRemoteSwiftPackageReference;
+            repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+            requirement = {
+                kind = upToNextMajorVersion;
+                minimumVersion = 12.0.0;
+            };
+        };
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
         AA0000000000000000000011 /* ClockCore */ = {
             isa = XCSwiftPackageProductDependency;
             productName = ClockCore;
+        };
+        AA0000000000000000000021 /* GoogleMobileAds */ = {
+            isa = XCSwiftPackageProductDependency;
+            package = AA0000000000000000000020 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+            productName = GoogleMobileAds;
         };
 /* End XCSwiftPackageProductDependency section */
     };

@@ -30,18 +30,22 @@ struct ContentView: View {
         ZStack {
             BackgroundView()
 
-            ScrollView {
-                VStack(spacing: 24) {
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(spacing: 24) {
                     hourStylePicker
                     input
                     zoneList
                     note
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
-                .padding(.bottom, 32)
-                .frame(maxWidth: 520)
-                .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 24)
+                    .frame(maxWidth: 520)
+                    .frame(maxWidth: .infinity)
+                }
+
+                AdBannerSlot()
             }
         }
         .task {
