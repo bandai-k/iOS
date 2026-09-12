@@ -1,8 +1,9 @@
 name: CI
 
 on:
+  # ブランチ名を書くと、既定のブランチ名が違うリポジトリで一度も走らなくなるため、
+  # push は全ブランチを対象にする。
   push:
-    branches: [main]
   pull_request:
 
 concurrency:
