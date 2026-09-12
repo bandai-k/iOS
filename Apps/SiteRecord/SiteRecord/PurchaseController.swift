@@ -7,7 +7,7 @@ import StoreKit
 @MainActor
 final class PurchaseController: ObservableObject {
     /// App Store Connect に登録する商品 ID。
-    static let unlockProductID = "com.example.siterecord.unlock"
+    static let unlockProductID = "jp.nebulab.siterecord.unlock"
 
     /// 購入済みか。判定できるまでは false。
     @Published private(set) var isUnlocked = false

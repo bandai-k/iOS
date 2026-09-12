@@ -102,8 +102,8 @@ make test                 # 共有パッケージのテストを全部実行
 - 看板の設定と施工前後の比較画像は、無料のまま制限なく使える
 - 残り枚数はカメラ画面の左上に出る
 
-商品 ID は `com.example.siterecord.unlock`（買い切り / 非消耗型）。App Store Connect に
-登録するまでは価格を取得できないので、手元で試すときは **Xcode から実行**してください。
+商品 ID は `jp.nebulab.siterecord.unlock`（買い切り / 非消耗型 / ¥300）。App Store Connect に
+登録済みだが、Sandbox で価格を取得するには実機を Sandbox アカウントでサインインさせる必要がある。手元で試すときは、手元で試すときは **Xcode から実行**してください。
 スキームに `Apps/SiteRecord/SiteRecordTests/Products.storekit` を紐付けてあるので、
 Xcode 実行時はその設定で購入まで通せます。
 

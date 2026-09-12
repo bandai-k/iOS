@@ -3,7 +3,7 @@
   "nonRenewingSubscriptions" : [],
   "products" : [
     {
-      "displayPrice" : "600",
+      "displayPrice" : "300",
       "familyShareable" : false,
       "internalID" : "B1000001",
       "localizations" : [
@@ -13,7 +13,7 @@
           "locale" : "ja_JP"
         }
       ],
-      "productID" : "com.example.siterecord.unlock",
+      "productID" : "jp.nebulab.siterecord.unlock",
       "referenceName" : "Unlimited unlock",
       "type" : "NonConsumable"
     }
