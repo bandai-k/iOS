@@ -9,6 +9,7 @@ struct CameraScreen: View {
     private static let timestamp = BoardTimestamp()
 
     @StateObject private var camera = CameraController()
+    @StateObject private var location = LocationProvider()
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var board: SiteBoard
@@ -43,13 +44,23 @@ struct CameraScreen: View {
             controls
             toast
         }
-        .onAppear { camera.start() }
-        .onDisappear { camera.stop() }
+        .onAppear {
+            camera.start()
+            location.start()
+        }
+        .onDisappear {
+            camera.stop()
+            location.stop()
+        }
         .onChange(of: scenePhase) { _, phase in
             // ホームに戻っている間はセッションを止め、戻ってきたら即再開する。
             switch phase {
-            case .active: camera.start()
-            case .background: camera.stop()
+            case .active:
+                camera.start()
+                location.start()
+            case .background:
+                camera.stop()
+                location.stop()
             default: break
             }
         }
@@ -216,7 +227,12 @@ struct CameraScreen: View {
                 timestamp: Self.timestamp.string(for: capturedAt)
             )
             // 焼き込んだ後も撮影日時や機種が写真に残るよう、元のメタデータを付けて書き出す。
-            let data = try JPEGWriter.data(from: stamped, metadata: captured.metadata)
+            // 位置が取れていれば GPS も書く。取れていなくても撮影は止めない。
+            let data = try JPEGWriter.data(
+                from: stamped,
+                metadata: captured.metadata,
+                location: location.photoLocation
+            )
             try await PhotoLibrarySaver.save(data)
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             show("保存しました")

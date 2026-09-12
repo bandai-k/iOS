@@ -18,8 +18,14 @@ enum JPEGWriter {
 
     static let quality: CGFloat = 0.9
 
-    /// - Parameter metadata: 撮影時のメタデータ。`nil` ならメタデータなしで書き出す。
-    static func data(from image: UIImage, metadata: [String: Any]? = nil) throws -> Data {
+    /// - Parameters:
+    ///   - metadata: 撮影時のメタデータ。`nil` ならメタデータなしで書き出す。
+    ///   - location: 撮影位置。渡すと GPS として書き込む。
+    static func data(
+        from image: UIImage,
+        metadata: [String: Any]? = nil,
+        location: PhotoLocation? = nil
+    ) throws -> Data {
         guard let cgImage = image.cgImage else { throw WriteError.encodingFailed }
 
         let output = NSMutableData()
@@ -36,7 +42,8 @@ enum JPEGWriter {
             PhotoMetadata.forComposite(
                 original: $0,
                 pixelSize: CGSize(width: cgImage.width, height: cgImage.height),
-                software: softwareName
+                software: softwareName,
+                location: location
             )
         } ?? [:]
         properties[kCGImageDestinationLossyCompressionQuality as String] = quality

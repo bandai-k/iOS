@@ -151,3 +151,84 @@ final class PhotoMetadataTests: XCTestCase {
         XCTAssertNil(result[kCGImagePropertyThumbnailImages as String])
     }
 }
+
+final class GPSMetadataTests: XCTestCase {
+    /// 2026-09-12T09:41:07Z
+    private let timestamp = Date(timeIntervalSince1970: 1_789_206_067)
+
+    private func gps(latitude: Double, longitude: Double, altitude: Double? = nil, accuracy: Double? = nil) -> [String: Any]? {
+        GPSMetadata.dictionary(for: PhotoLocation(
+            latitude: latitude,
+            longitude: longitude,
+            altitude: altitude,
+            horizontalAccuracy: accuracy,
+            timestamp: timestamp
+        ))
+    }
+
+    func testNorthEastCoordinates() {
+        // 東京駅あたり。
+        let result = gps(latitude: 35.681236, longitude: 139.767125)
+        XCTAssertEqual(result?[kCGImagePropertyGPSLatitude as String] as? Double, 35.681236)
+        XCTAssertEqual(result?[kCGImagePropertyGPSLatitudeRef as String] as? String, "N")
+        XCTAssertEqual(result?[kCGImagePropertyGPSLongitude as String] as? Double, 139.767125)
+        XCTAssertEqual(result?[kCGImagePropertyGPSLongitudeRef as String] as? String, "E")
+    }
+
+    func testSouthWestCoordinatesAreStoredAsAbsoluteValues() {
+        // EXIF は符号ではなく方角の記号で持つ。
+        let result = gps(latitude: -33.8688, longitude: -70.6693)
+        XCTAssertEqual(result?[kCGImagePropertyGPSLatitude as String] as? Double, 33.8688)
+        XCTAssertEqual(result?[kCGImagePropertyGPSLatitudeRef as String] as? String, "S")
+        XCTAssertEqual(result?[kCGImagePropertyGPSLongitude as String] as? Double, 70.6693)
+        XCTAssertEqual(result?[kCGImagePropertyGPSLongitudeRef as String] as? String, "W")
+    }
+
+    func testTimeStampIsUTC() {
+        // 端末が JST でも GPS の時刻は UTC で書く。
+        let result = gps(latitude: 35.681236, longitude: 139.767125)
+        XCTAssertEqual(result?[kCGImagePropertyGPSTimeStamp as String] as? String, "09:41:07")
+        XCTAssertEqual(result?[kCGImagePropertyGPSDateStamp as String] as? String, "2026:09:12")
+    }
+
+    func testAltitudeReference() {
+        let above = gps(latitude: 35.6, longitude: 139.7, altitude: 40.5)
+        XCTAssertEqual(above?[kCGImagePropertyGPSAltitude as String] as? Double, 40.5)
+        XCTAssertEqual(above?[kCGImagePropertyGPSAltitudeRef as String] as? Int, 0)
+
+        let below = gps(latitude: 35.6, longitude: 139.7, altitude: -12)
+        XCTAssertEqual(below?[kCGImagePropertyGPSAltitude as String] as? Double, 12, "海面下も絶対値で持つ")
+        XCTAssertEqual(below?[kCGImagePropertyGPSAltitudeRef as String] as? Int, 1)
+    }
+
+    func testAccuracyIsOptional() {
+        let withAccuracy = gps(latitude: 35.6, longitude: 139.7, accuracy: 8)
+        XCTAssertEqual(withAccuracy?[kCGImagePropertyGPSHPositioningError as String] as? Double, 8)
+
+        // CoreLocation は測れていないとき負の誤差を返す。
+        let invalid = gps(latitude: 35.6, longitude: 139.7, accuracy: -1)
+        XCTAssertNil(invalid?[kCGImagePropertyGPSHPositioningError as String])
+    }
+
+    func testUnmeasuredLocationIsRejected() {
+        XCTAssertNil(gps(latitude: 0, longitude: 0), "0,0 は測位できていない値として扱う")
+        XCTAssertNil(gps(latitude: .nan, longitude: 139.7))
+        XCTAssertNil(gps(latitude: 91, longitude: 139.7))
+        XCTAssertNil(gps(latitude: 35.6, longitude: 181))
+    }
+
+    func testCompositeMetadataCarriesLocation() {
+        let metadata = PhotoMetadata.forComposite(
+            original: [:],
+            pixelSize: CGSize(width: 100, height: 100),
+            location: PhotoLocation(latitude: 35.681236, longitude: 139.767125, timestamp: timestamp)
+        )
+        let gps = metadata[kCGImagePropertyGPSDictionary as String] as? [String: Any]
+        XCTAssertEqual(gps?[kCGImagePropertyGPSLatitudeRef as String] as? String, "N")
+    }
+
+    func testCompositeMetadataWithoutLocationHasNoGPS() {
+        let metadata = PhotoMetadata.forComposite(original: [:], pixelSize: CGSize(width: 100, height: 100))
+        XCTAssertNil(metadata[kCGImagePropertyGPSDictionary as String])
+    }
+}

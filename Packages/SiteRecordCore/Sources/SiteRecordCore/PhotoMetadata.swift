@@ -16,10 +16,12 @@ public enum PhotoMetadata {
     ///   - original: `AVCapturePhoto.metadata` などから受け取った撮影時のメタデータ。
     ///   - pixelSize: 合成後の画像の画素数。
     ///   - software: 記録しておくアプリ名。`nil` なら元の値のまま。
+    ///   - location: 撮影位置。渡すと GPS 辞書として書き込む。
     public static func forComposite(
         original: [String: Any],
         pixelSize: CGSize,
-        software: String? = nil
+        software: String? = nil,
+        location: PhotoLocation? = nil
     ) -> [String: Any] {
         var metadata = original
 
@@ -41,6 +43,11 @@ public enum PhotoMetadata {
             tiff[kCGImagePropertyTIFFSoftware as String] = software
         }
         metadata[kCGImagePropertyTIFFDictionary as String] = tiff
+
+        // カメラ由来の GPS が無い場合に備え、撮影時に測れていれば書き足す。
+        if let location, let gps = GPSMetadata.dictionary(for: location) {
+            metadata[kCGImagePropertyGPSDictionary as String] = gps
+        }
 
         // 元の画像から作られた縮小版は合成後の見た目と違うので落とす。
         metadata[kCGImagePropertyThumbnailImages as String] = nil

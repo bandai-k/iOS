@@ -229,6 +229,7 @@
                 GENERATE_INFOPLIST_FILE = YES;
                 INFOPLIST_KEY_CFBundleDisplayName = "施工記録カメラ";
                 INFOPLIST_KEY_NSCameraUsageDescription = "工事記録の写真を撮影するためにカメラを使います。";
+                INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "記録写真に撮影場所を記録するために現在地を使います。";
                 INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "撮影した記録写真を写真アプリに保存します。";
                 INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
                 INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -259,6 +260,7 @@
                 GENERATE_INFOPLIST_FILE = YES;
                 INFOPLIST_KEY_CFBundleDisplayName = "施工記録カメラ";
                 INFOPLIST_KEY_NSCameraUsageDescription = "工事記録の写真を撮影するためにカメラを使います。";
+                INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "記録写真に撮影場所を記録するために現在地を使います。";
                 INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "撮影した記録写真を写真アプリに保存します。";
                 INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
                 INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
