@@ -163,3 +163,22 @@ Google Mobile Ads SDK を Swift Package Manager で入れています
   一覧は増えることがあるので、配信前に
   [Privacy strategies](https://developers.google.com/admob/ios/privacy/strategies) を見て追記する
 - ATT（`NSUserTrackingUsageDescription`）はまだ入れていない。パーソナライズ広告を出すなら別途必要
+
+## App Store に出す前の共通の準備
+
+どのアプリにも入れてあるもの:
+
+- `PrivacyInfo.xcprivacy`（プライバシーマニフェスト）。Apple が提出時に要求する。
+  いまの申告は「トラッキングなし」「アプリが集めて外に送るデータなし」「`UserDefaults` の
+  使用理由は CA92.1（自アプリ内でのみ使用）」。データの扱いを変えたら合わせて更新する
+- `ITSAppUsesNonExemptEncryption = false`。通信は OS 標準の HTTPS だけなので該当なし。
+  これを入れておくとアップロードのたびの輸出コンプライアンス質問が出なくなる
+
+まだ手を付けていないもの:
+
+- App Store Connect の「アプリのプライバシー」の回答。広告 SDK が集めるデータ（端末 ID など）は
+  アプリ側のマニフェストではなくこの質問票で申告する必要がある（Speedometer / TimeZONE）
+- ATT（`NSUserTrackingUsageDescription` と `ATTrackingManager`）。入れていないので、
+  広告はパーソナライズなしで配信される
+- EEA 向けの同意フォーム（Google の UMP）。AdMob 管理画面での設定と SDK 側の実装が必要
+- SiteRecord の買い切り商品 `com.example.siterecord.unlock` の App Store Connect への登録
