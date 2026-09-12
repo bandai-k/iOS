@@ -184,3 +184,16 @@ Google Mobile Ads SDK を Swift Package Manager で入れています
 - App Store Connect の「アプリのプライバシー」の回答。広告 SDK が集めるデータ（端末 ID など）は
   アプリ側のマニフェストではなくこの質問票で申告する必要がある（Speedometer / TimeZONE）
 - SiteRecord の買い切り商品 `com.example.siterecord.unlock` の App Store Connect への登録
+
+## プライバシーポリシー
+
+各アプリのプライバシーポリシーを `docs/privacy/` に置き、GitHub Pages で公開しています。
+
+- 一覧: https://bandai-k.github.io/iOS/privacy/
+- App Store と AdMob には、アプリごとのページの URL を登録する
+
+**最終的には Nebulab のホームページへ移設する予定**です。移設したら、この 2 か所の URL を
+忘れずに差し替えてください。
+
+1. App Store Connect の「App のプライバシー」＞プライバシーポリシー URL
+2. AdMob の「プライバシーとメッセージ」＞各アプリのプライバシー ポリシーの URL
