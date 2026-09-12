@@ -9,10 +9,12 @@ Apps/                 アプリごとに 1 ディレクトリ（.xcodeproj は�
   TimeZONE/           日時をタイムゾーン間で変換するアプリ（表示名: タイムZONE）
   SiteRecord/         看板付きで写真を撮る施工管理記録アプリ
   Sengiri/            野菜を千切りするタイムアタックゲーム
+  Speedometer/        いまの速度をメーターで見るアプリ（表示名: スピードメーター）
 Packages/             アプリ間で共有する Swift Package
   ClockCore/          タイムゾーンの定義と時刻フォーマット（ロジック + テスト）
   SiteRecordCore/     看板の項目・保存・撮影日時フォーマット（ロジック + テスト）
   SengiriCore/        千切りゲームのルール・記録・タイム計測（ロジック + テスト）
+  SpeedometerCore/    速度の換算とメーターの目盛り計算（ロジック + テスト）
 docs/                 運用メモ
 Makefile              ビルド / テストのショートカット
 ```
@@ -34,6 +36,7 @@ Xcode で開く:
 open Apps/TimeZONE/TimeZONE.xcodeproj
 open Apps/SiteRecord/SiteRecord.xcodeproj
 open Apps/Sengiri/Sengiri.xcodeproj
+open Apps/Speedometer/Speedometer.xcodeproj
 ```
 
 共有パッケージはローカルパッケージ参照としてプロジェクトに組み込まれているので、
@@ -102,3 +105,21 @@ make test                 # 共有パッケージのテストを全部実行
 ## 新しいアプリを追加するには
 
 [docs/adding-a-new-app.md](docs/adding-a-new-app.md) を参照してください。
+
+## アプリ: Speedometer（表示名: スピードメーター）
+
+車や新幹線で移動しているときの速度を見るだけのアプリです。
+記録も設定もなく、開くと現在の速度が出ます。
+
+- 表示はアナログメーターとデジタル表示の 2 種類。**左右のスワイプで切り替え**、最後に見ていた方が次回起動時も出る
+- 速度は位置情報 (`CLLocation.speed`) から取得。単位は km/h
+- 目盛りは 0〜180 km/h。速度が上限の 8 割を超えると 0〜360 km/h に切り替わり、
+  十分下がると戻る（新幹線でも振り切れない）
+- 速度が取れていないときは `--` と「測定中」の案内を出す。停車中の 0 km/h とは区別する
+- トンネルなどで位置情報が 5 秒以上途切れたら、古い速度を出し続けずに「測定中」へ戻す
+- 表示中は画面を自動で消灯させない
+- 初回起動時に位置情報（使用中のみ）の許可を求める
+
+メーターの目盛り・針の角度・速度の換算・値の鮮度判定は `Packages/SpeedometerCore` 側にあり、
+単体テストで検証している。シミュレータでは `xcrun simctl location <device> start --speed=27.8 …`
+で移動を再現すると動作を確認できる。
