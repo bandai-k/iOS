@@ -209,13 +209,15 @@ struct CameraScreen: View {
         // シャッターを切った瞬間の時刻を焼き込む。
         let capturedAt = Date()
         do {
-            let photo = try await camera.capturePhoto()
+            let captured = try await camera.capturePhoto()
             let stamped = PhotoComposer.compose(
-                photo: photo,
+                photo: captured.image,
                 board: board,
                 timestamp: Self.timestamp.string(for: capturedAt)
             )
-            try await PhotoLibrarySaver.save(stamped)
+            // 焼き込んだ後も撮影日時や機種が写真に残るよう、元のメタデータを付けて書き出す。
+            let data = try JPEGWriter.data(from: stamped, metadata: captured.metadata)
+            try await PhotoLibrarySaver.save(data)
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             show("保存しました")
         } catch {

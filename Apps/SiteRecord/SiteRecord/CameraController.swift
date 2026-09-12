@@ -1,6 +1,12 @@
 import AVFoundation
 import UIKit
 
+/// 撮影した写真 1 枚分。画像と、カメラが付けた EXIF などのメタデータ。
+struct CapturedPhoto {
+    let image: UIImage
+    let metadata: [String: Any]
+}
+
 /// 背面カメラのセッションと撮影を受け持つ。
 ///
 /// AVFoundation の設定・開始はブロックするのでプライベートキューで行い、
@@ -22,7 +28,7 @@ final class CameraController: NSObject, ObservableObject {
     private let photoOutput = AVCapturePhotoOutput()
     private var isConfigured = false
     /// 撮影完了デリゲートと `capturePhoto()` の橋渡し。メインキューでのみ触る。
-    private var captureContinuation: CheckedContinuation<UIImage, Error>?
+    private var captureContinuation: CheckedContinuation<CapturedPhoto, Error>?
 
     func start() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
@@ -98,14 +104,14 @@ final class CameraController: NSObject, ObservableObject {
 
     /// シャッターを切って撮影画像を返す。メインアクターから呼ぶこと。
     @MainActor
-    func capturePhoto() async throws -> UIImage {
+    func capturePhoto() async throws -> CapturedPhoto {
         guard status == .ready else { throw CameraError.notReady }
         guard !isCapturing else { throw CameraError.notReady }
 
         isCapturing = true
         defer { isCapturing = false }
 
-        return try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<CapturedPhoto, Error>) in
             captureContinuation = continuation
             sessionQueue.async { [weak self] in
                 guard let self else { return }
@@ -124,11 +130,12 @@ extension CameraController: AVCapturePhotoCaptureDelegate {
         didFinishProcessingPhoto photo: AVCapturePhoto,
         error: Error?
     ) {
-        let result: Result<UIImage, Error>
+        let result: Result<CapturedPhoto, Error>
         if let error {
             result = .failure(error)
         } else if let data = photo.fileDataRepresentation(), let image = UIImage(data: data) {
-            result = .success(image)
+            // 撮影日時や機種は合成後の写真にも残したいので、メタデータを一緒に持ち帰る。
+            result = .success(CapturedPhoto(image: image, metadata: photo.metadata))
         } else {
             result = .failure(CameraError.captureFailed)
         }
