@@ -1,3 +1,4 @@
+import CoreGraphics
 import Foundation
 
 /// 施工前後を並べる向き。
@@ -154,11 +155,12 @@ public enum ComparisonComposer {
 
 private extension CGRect {
     func scaled(by factor: CGFloat) -> CGRect {
-        CGRect(
-            x: origin.x * factor,
-            y: origin.y * factor,
-            width: width * factor,
-            height: height * factor
-        )
+        // 4 つの掛け算を CGRect のイニシャライザに直接並べると型推論が終わらないので、
+        // いったん CGFloat の変数に落としてから組み立てる。
+        let x: CGFloat = origin.x * factor
+        let y: CGFloat = origin.y * factor
+        let scaledWidth: CGFloat = width * factor
+        let scaledHeight: CGFloat = height * factor
+        return CGRect(x: x, y: y, width: scaledWidth, height: scaledHeight)
     }
 }

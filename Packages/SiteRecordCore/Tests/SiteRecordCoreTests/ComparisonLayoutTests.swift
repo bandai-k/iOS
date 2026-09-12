@@ -1,3 +1,4 @@
+import CoreGraphics
 import XCTest
 @testable import SiteRecordCore
 
@@ -61,7 +62,7 @@ final class ComparisonLayoutTests: XCTestCase {
     func testDegenerateSizesDoNotProduceInvalidLayout() {
         let layout = ComparisonComposer.layout(
             beforeSize: CGSize(width: 0, height: 0),
-            afterSize: CGSize(width: .nan, height: 100),
+            afterSize: CGSize(width: CGFloat.nan, height: 100),
             axis: .vertical
         )
         XCTAssertTrue(layout.canvasSize.width.isFinite)
