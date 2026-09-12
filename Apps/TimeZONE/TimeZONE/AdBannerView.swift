@@ -6,12 +6,15 @@ import UIKit
 ///
 /// 広告 SDK は UIKit のビューしか用意していないので、SwiftUI から使えるように包む。
 struct AdBannerView: UIViewRepresentable {
-    /// 本番の広告ユニット ID に差し替えるまでは、Google が公開しているテスト用 ID を使う。
+    /// このアプリ用に AdMob で作ったバナーの広告ユニット ID。
+    static let unitID = "ca-app-pub-6037710903474110/4690918964"
+
+    /// 広告の中身を出さずに動作だけ見たいときのための、Google が公開しているテスト用 ID。
     static let testUnitID = "ca-app-pub-3940256099942544/2934735716"
 
     let unitID: String
 
-    init(unitID: String = AdBannerView.testUnitID) {
+    init(unitID: String = AdBannerView.unitID) {
         self.unitID = unitID
     }
 

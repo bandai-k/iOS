@@ -2,10 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- AdMob のアプリ ID。GENERATE_INFOPLIST_FILE が知らないキーなので、ここに書く。
-	     いまは Google が公開しているテスト用の ID。本番は AdMob で発行した ID に差し替える。 -->
+	<!-- AdMob のアプリ ID。GENERATE_INFOPLIST_FILE が知らないキーなので、ここに書く。 -->
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<string>ca-app-pub-6037710903474110~9619812016</string>
 	<!-- 広告の計測に使う SKAdNetwork の ID。Google が案内している一覧をそのまま入れている。
 	     https://developers.google.com/admob/ios/privacy/strategies -->
 	<key>SKAdNetworkItems</key>

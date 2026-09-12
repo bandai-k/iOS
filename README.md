@@ -152,10 +152,11 @@ Google Mobile Ads SDK を Swift Package Manager で入れています
 （`https://github.com/googleads/swift-package-manager-google-mobile-ads.git`）。
 
 - バナーは画面下に固定。高さ 50pt を先に確保してあるので、広告の読み込み前後で画面が動かない
-- いまはアプリ ID・広告ユニット ID とも **Google が公開しているテスト用**。
-  本番配信時は AdMob で発行した値に差し替える
+- アプリ ID・広告ユニット ID とも AdMob で発行した本番の値が入っている
   - アプリ ID: 各アプリの `Info.plist` の `GADApplicationIdentifier`
-  - 広告ユニット ID: `AdBannerView.testUnitID`
+  - 広告ユニット ID: `AdBannerView.unitID`
+- 広告の中身を出さずに動作だけ見たいときは `AdBannerView(unitID: AdBannerView.testUnitID)` を使う
+  （テスト用 ID は残してある）。実機で本番 ID のまま自分で表示・タップし続けると無効なトラフィックになる
 - `GADApplicationIdentifier` は `GENERATE_INFOPLIST_FILE` が知らないキーなので、
   `INFOPLIST_FILE` で指定した `Info.plist` に書いている（生成される他のキーとは自動で合成される）
 - 広告の計測に使う `SKAdNetworkItems`（50 件）は Google の案内どおり `Info.plist` に入れてある。
