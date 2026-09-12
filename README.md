@@ -202,3 +202,11 @@ Google Mobile Ads SDK を Swift Package Manager で入れています
 
 1. App Store Connect の「App のプライバシー」＞プライバシーポリシー URL
 2. AdMob の「プライバシーとメッセージ」＞各アプリのプライバシー ポリシーの URL
+
+## 実機で動かすとき
+
+4 アプリとも `DEVELOPMENT_TEAM` をプロジェクトに設定済み（個人用の Personal Team）なので、
+Xcode で開いて実機を選べばそのままビルドできます。別のチームで署名する場合は、Xcode の
+Signing & Capabilities で Team を選び直すか、`xcodebuild ... DEVELOPMENT_TEAM=<ID>` を渡してください。
+
+シミュレータ向けのビルドとテストには署名が不要なので、CI には影響しません。
