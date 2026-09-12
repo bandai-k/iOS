@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct UTCJSTApp: App {
+struct TimeZONEApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

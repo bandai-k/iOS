@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "AA0000000000000000000002"
-               BuildableName = "UTCJST.app"
-               BlueprintName = "UTCJST"
-               ReferencedContainer = "container:UTCJST.xcodeproj">
+               BuildableName = "TimeZONE.app"
+               BlueprintName = "TimeZONE"
+               ReferencedContainer = "container:TimeZONE.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AA0000000000000000000002"
-            BuildableName = "UTCJST.app"
-            BlueprintName = "UTCJST"
-            ReferencedContainer = "container:UTCJST.xcodeproj">
+            BuildableName = "TimeZONE.app"
+            BlueprintName = "TimeZONE"
+            ReferencedContainer = "container:TimeZONE.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "AA0000000000000000000002"
-            BuildableName = "UTCJST.app"
-            BlueprintName = "UTCJST"
-            ReferencedContainer = "container:UTCJST.xcodeproj">
+            BuildableName = "TimeZONE.app"
+            BlueprintName = "TimeZONE"
+            ReferencedContainer = "container:TimeZONE.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

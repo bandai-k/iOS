@@ -24,7 +24,7 @@ jobs:
       fail-fast: false
       matrix:
         # アプリを追加したらここにも名前を足す。
-        app: [UTCJST, SiteRecord, Sengiri]
+        app: [TimeZONE, SiteRecord, Sengiri]
     steps:
       - uses: actions/checkout@v4
       - run: make build APP=${{ matrix.app }} DESTINATION='platform=iOS Simulator,name=iPhone 16'

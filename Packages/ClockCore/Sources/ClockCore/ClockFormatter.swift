@@ -1,26 +1,29 @@
 import Foundation
 
-/// 1 つのタイムゾーン用に `DateFormatter` を組み立てて使い回すフォーマッタ。
+/// 1 つのタイムゾーン + 表記スタイル用に `DateFormatter` を組み立てて使い回すフォーマッタ。
 ///
-/// `DateFormatter` の生成はそれなりに重いので、ゾーンごとに 1 度だけ作って
+/// `DateFormatter` の生成はそれなりに重いので、組み合わせごとに 1 度だけ作って
 /// 毎秒の更新では `snapshot(at:)` を呼ぶだけにしている。
 public struct ClockFormatter {
     public let zone: ClockZone
+    public let hourStyle: HourStyle
 
     private let timeFormatter: DateFormatter
     private let dateFormatter: DateFormatter
 
-    public init(zone: ClockZone) {
+    public init(zone: ClockZone, hourStyle: HourStyle = .twentyFour) {
         self.zone = zone
+        self.hourStyle = hourStyle
 
         let timeZone = zone.timeZone
-        // 端末のロケール設定に左右されず常に 24 時間表記にするため en_US_POSIX を使う。
+        // 端末のロケール設定に左右されず書式を固定するため en_US_POSIX を使う。
+        // (AM / PM 表記も端末の言語によらず常に "AM" / "PM" になる)
         let locale = Locale(identifier: "en_US_POSIX")
 
         timeFormatter = DateFormatter()
         timeFormatter.locale = locale
         timeFormatter.timeZone = timeZone
-        timeFormatter.dateFormat = "HH:mm:ss"
+        timeFormatter.dateFormat = hourStyle.timeFormat
 
         dateFormatter = DateFormatter()
         dateFormatter.locale = locale
@@ -47,7 +50,7 @@ public struct ClockFormatter {
     }
 }
 
-/// ゾーンごとの `ClockFormatter` を 1 つだけ作って共有するキャッシュ。
+/// ゾーン × 表記スタイルごとの `ClockFormatter` を 1 つだけ作って共有するキャッシュ。
 ///
 /// SwiftUI の View は更新のたびに再生成されるため、View の中で `ClockFormatter` を
 /// 作ると毎回 `DateFormatter` の初期化が走ってしまう。ここに逃がして使い回す。
@@ -55,12 +58,13 @@ public struct ClockFormatter {
 public enum ClockFormatterStore {
     private static var formatters: [String: ClockFormatter] = [:]
 
-    public static func formatter(for zone: ClockZone) -> ClockFormatter {
-        if let cached = formatters[zone.id] {
+    public static func formatter(for zone: ClockZone, hourStyle: HourStyle = .twentyFour) -> ClockFormatter {
+        let key = "\(zone.id)|\(hourStyle.rawValue)"
+        if let cached = formatters[key] {
             return cached
         }
-        let created = ClockFormatter(zone: zone)
-        formatters[zone.id] = created
+        let created = ClockFormatter(zone: zone, hourStyle: hourStyle)
+        formatters[key] = created
         return created
     }
 }

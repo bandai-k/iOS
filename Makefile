@@ -1,10 +1,10 @@
 # モノレポ共通のタスク。macOS + Xcode 16 以降で実行する想定。
 #
 #   make list             … アプリとパッケージの一覧
-#   make build APP=UTCJST … 指定アプリをシミュレータ向けにビルド
+#   make build APP=TimeZONE … 指定アプリをシミュレータ向けにビルド
 #   make test             … 共有パッケージのテストを全部実行
 
-APP ?= UTCJST
+APP ?= TimeZONE
 DESTINATION ?= platform=iOS Simulator,name=iPhone 16
 
 APPS := $(notdir $(patsubst %/,%,$(wildcard Apps/*/)))

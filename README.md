@@ -6,7 +6,7 @@
 
 ```
 Apps/                 アプリごとに 1 ディレクトリ（.xcodeproj はここに置く）
-  UTCJST/             UTC と JST を表示するだけのアプリ
+  TimeZONE/           日時をタイムゾーン間で変換するアプリ（表示名: タイムZONE）
   SiteRecord/         看板付きで写真を撮る施工管理記録アプリ
   Sengiri/            野菜を千切りするタイムアタックゲーム
 Packages/             アプリ間で共有する Swift Package
@@ -31,7 +31,7 @@ Makefile              ビルド / テストのショートカット
 Xcode で開く:
 
 ```sh
-open Apps/UTCJST/UTCJST.xcodeproj
+open Apps/TimeZONE/TimeZONE.xcodeproj
 open Apps/SiteRecord/SiteRecord.xcodeproj
 open Apps/Sengiri/Sengiri.xcodeproj
 ```
@@ -43,18 +43,26 @@ open Apps/Sengiri/Sengiri.xcodeproj
 
 ```sh
 make list                 # アプリと共有パッケージの一覧
-make build APP=UTCJST     # シミュレータ向けにビルド
+make build APP=TimeZONE   # シミュレータ向けにビルド
 make test                 # 共有パッケージのテストを全部実行
 ```
 
-## アプリ: UTCJST
+## アプリ: TimeZONE（表示名: タイムZONE）
 
-現在時刻を UTC（協定世界時）と JST（日本標準時）の 2 つで並べて表示します。
-表示するだけのアプリなので、設定画面もネットワーク通信もありません。
+入力した日時を、選んでおいたタイムゾーンすべてで同時に見られるアプリです。
+ネットワーク通信はありません。
 
-- 時刻は `HH:mm:ss`、日付は `yyyy-MM-dd (EEE)`、UTC からのオフセットも併記
-- `TimelineView` で 0.5 秒ごとに更新（画面が見えていないときは停止する）
-- ライト / ダークの両方に対応
+- 起動時は現在時刻が入った状態（秒は 00）。「いま」ボタンでいつでも現在時刻に戻せる
+- 入力した日時をどのタイムゾーンの時刻とみなすかを選べる。枠が付いたカードが入力側
+- 時刻表記は 24 時間（`15:04:05`）と AM / PM（`3:04:05 PM`）を切り替え可能。選んだ表記は端末に保存される
+- タイムゾーンは「UTC からのずれ」で追加する。地域名は 400 件以上あって選びにくいので、
+  選択肢は 37 種のずれにまとめ、その帯の代表的な都市名（`Tokyo, Seoul ほか`）を補足に出す
+- 追加したずれは夏時間を持たない固定のずれとして扱う。都市名はあくまで目安
+- 「編集」で削除。並び順は UTC からのずれが小さい順に自動で揃う。UTC は変換の基準なので消せない
+- 一覧は端末に保存され、次回起動時もそのまま
+
+変換のロジック（壁時計時刻とタイムゾーンの読み替え、ずれの一覧、一覧の保存）は
+`Packages/ClockCore` 側にあり、単体テストで検証している。
 
 ## アプリ: SiteRecord（施工記録カメラ）
 
