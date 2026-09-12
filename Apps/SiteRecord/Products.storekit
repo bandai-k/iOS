@@ -1,0 +1,29 @@
+{
+  "identifier" : "A1B2C3D4",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "600",
+      "familyShareable" : false,
+      "internalID" : "B1000001",
+      "localizations" : [
+        {
+          "description" : "撮影枚数の制限がなくなります。買い切りです。",
+          "displayName" : "無制限アンロック",
+          "locale" : "ja_JP"
+        }
+      ],
+      "productID" : "com.example.siterecord.unlock",
+      "referenceName" : "Unlimited unlock",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

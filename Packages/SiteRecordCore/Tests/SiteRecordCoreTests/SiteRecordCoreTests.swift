@@ -232,3 +232,78 @@ final class GPSMetadataTests: XCTestCase {
         XCTAssertNil(metadata[kCGImagePropertyGPSDictionary as String])
     }
 }
+
+final class CaptureQuotaTests: XCTestCase {
+    private var calendar: Calendar = {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(identifier: "Asia/Tokyo")!
+        return calendar
+    }()
+
+    /// 2026-09-12 09:00 JST
+    private let morning = Date(timeIntervalSince1970: 1_789_171_200)
+
+    private func quota() -> CaptureQuota { .empty(at: morning, calendar: calendar) }
+
+    func testThreeFreeCapturesPerDay() {
+        var quota = quota()
+        XCTAssertEqual(quota.remaining(at: morning, calendar: calendar), 3)
+
+        for expected in [2, 1, 0] {
+            XCTAssertTrue(quota.allowsCapture(at: morning, calendar: calendar))
+            quota = quota.recording(at: morning, calendar: calendar)
+            XCTAssertEqual(quota.remaining(at: morning, calendar: calendar), expected)
+        }
+        XCTAssertFalse(quota.allowsCapture(at: morning, calendar: calendar), "4 枚目は無料では撮れない")
+    }
+
+    func testCountResetsNextDay() {
+        var quota = quota()
+        for _ in 0..<3 { quota = quota.recording(at: morning, calendar: calendar) }
+        XCTAssertFalse(quota.allowsCapture(at: morning, calendar: calendar))
+
+        // 同じ日の深夜 23:59 はまだ数え直さない。
+        let lateNight = morning.addingTimeInterval(14 * 3600 + 59 * 60)
+        XCTAssertEqual(quota.remaining(at: lateNight, calendar: calendar), 0)
+
+        // 日付が変わればまた 3 枚。
+        let nextDay = morning.addingTimeInterval(24 * 3600)
+        XCTAssertEqual(quota.remaining(at: nextDay, calendar: calendar), 3)
+        XCTAssertTrue(quota.allowsCapture(at: nextDay, calendar: calendar))
+    }
+
+    func testRecordingAfterMidnightStartsFromOne() {
+        var quota = quota()
+        for _ in 0..<3 { quota = quota.recording(at: morning, calendar: calendar) }
+
+        let nextDay = morning.addingTimeInterval(24 * 3600)
+        quota = quota.recording(at: nextDay, calendar: calendar)
+        XCTAssertEqual(quota.count, 1)
+        XCTAssertEqual(quota.remaining(at: nextDay, calendar: calendar), 2)
+    }
+
+    func testStoreRoundTripAndDailyReset() {
+        let defaults = UserDefaults(suiteName: "CaptureQuotaTests")!
+        defaults.removePersistentDomain(forName: "CaptureQuotaTests")
+        let store = CaptureQuotaStore(defaults: defaults, key: "quota")
+
+        XCTAssertEqual(store.load(at: morning, calendar: calendar).count, 0, "未保存なら 0 枚")
+
+        store.save(quota().recording(at: morning, calendar: calendar))
+        XCTAssertEqual(store.load(at: morning, calendar: calendar).count, 1)
+
+        // 日をまたいだら保存済みの値に関係なく 0 枚から。
+        let nextDay = morning.addingTimeInterval(24 * 3600)
+        XCTAssertEqual(store.load(at: nextDay, calendar: calendar).count, 0)
+
+        defaults.removePersistentDomain(forName: "CaptureQuotaTests")
+    }
+
+    func testBrokenDataFallsBackToEmpty() {
+        let defaults = UserDefaults(suiteName: "CaptureQuotaTests")!
+        defaults.set(Data("not json".utf8), forKey: "quota")
+        let store = CaptureQuotaStore(defaults: defaults, key: "quota")
+        XCTAssertEqual(store.load(at: morning, calendar: calendar).count, 0)
+        defaults.removePersistentDomain(forName: "CaptureQuotaTests")
+    }
+}

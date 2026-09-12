@@ -7,9 +7,11 @@ struct CameraScreen: View {
     /// 看板は端末に保存して使い回す。起動時の読み込みは同期で済ませる。
     private static let store = SiteBoardStore()
     private static let timestamp = BoardTimestamp()
+    private static let quotaStore = CaptureQuotaStore()
 
     @StateObject private var camera = CameraController()
     @StateObject private var location = LocationProvider()
+    @StateObject private var purchases = PurchaseController()
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var board: SiteBoard
@@ -18,9 +20,18 @@ struct CameraScreen: View {
     @State private var isSaving = false
     @State private var message: String?
     @State private var messageTask: Task<Void, Never>?
+    /// 無料で撮れる残り枚数。買い切り版を持っている場合は見ない。
+    @State private var quota: CaptureQuota
+    @State private var isShowingPaywall = false
 
     init() {
         _board = State(initialValue: Self.store.load())
+        _quota = State(initialValue: Self.quotaStore.load())
+    }
+
+    /// いま撮れるか。買い切り版か、その日の無料枠が残っていれば撮れる。
+    private var canCapture: Bool {
+        purchases.isUnlocked || quota.allowsCapture(at: Date())
     }
 
     var body: some View {
@@ -48,6 +59,7 @@ struct CameraScreen: View {
             camera.start()
             location.start()
         }
+        .task { await purchases.load() }
         .onDisappear {
             camera.stop()
             location.stop()
@@ -73,6 +85,9 @@ struct CameraScreen: View {
         .sheet(isPresented: $isComparing) {
             ComparisonView()
         }
+        .sheet(isPresented: $isShowingPaywall) {
+            PaywallView(purchases: purchases)
+        }
         .onChange(of: isComparing) { _, comparing in
             // 比較画面を開いている間はカメラを止め、戻ったら即再開する。
             if comparing {
@@ -91,6 +106,10 @@ struct CameraScreen: View {
             HStack(spacing: 10) {
                 boardButton
                 compareButton
+            }
+            .overlay(alignment: .bottomLeading) {
+                remainingBadge
+                    .offset(y: 34)
             }
             .padding(.horizontal, 16)
             .padding(.top, 8)
@@ -140,6 +159,24 @@ struct CameraScreen: View {
         .accessibilityLabel("施工前後の比較画像を作る")
     }
 
+    /// 無料枠の残りを出す。買い切り版を持っていれば出さない。
+    @ViewBuilder
+    private var remainingBadge: some View {
+        if !purchases.isUnlocked {
+            let remaining = quota.remaining(at: Date())
+            Button {
+                isShowingPaywall = true
+            } label: {
+                Text(remaining > 0 ? "今日はあと \(remaining) 枚" : "今日の無料分は終了")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(remaining > 0 ? .black.opacity(0.55) : Color.accentColor.opacity(0.9), in: Capsule())
+            }
+        }
+    }
+
     private var boardPreview: some View {
         // 1 秒ごとに時計を進める。画面が見えていない間は更新されない。
         TimelineView(.periodic(from: .now, by: 1)) { context in
@@ -167,7 +204,7 @@ struct CameraScreen: View {
             }
         }
         .disabled(camera.status != .ready || isSaving)
-        .opacity(camera.status == .ready ? 1 : 0.4)
+        .opacity(camera.status == .ready && canCapture ? 1 : 0.4)
         .frame(maxWidth: .infinity)
         .accessibilityLabel("撮影")
     }
@@ -214,6 +251,11 @@ struct CameraScreen: View {
     @MainActor
     private func capture() async {
         guard !isSaving else { return }
+        // 無料枠を使い切っていれば撮影せず購入画面を出す。
+        guard canCapture else {
+            isShowingPaywall = true
+            return
+        }
         isSaving = true
         defer { isSaving = false }
 
@@ -234,6 +276,11 @@ struct CameraScreen: View {
                 location: location.photoLocation
             )
             try await PhotoLibrarySaver.save(data)
+            // 保存できた 1 枚だけを数える。失敗した撮影で枠を減らさない。
+            if !purchases.isUnlocked {
+                quota = quota.recording(at: capturedAt)
+                Self.quotaStore.save(quota)
+            }
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             show("保存しました")
         } catch {
