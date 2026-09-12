@@ -1,16 +1,36 @@
 import AppTrackingTransparency
 import GoogleMobileAds
 import UIKit
+import UserMessagingPlatform
 
 /// 広告まわりの起動処理。
+///
+/// 手順は Google の案内どおり、同意フォーム → ATT の確認 → 広告 SDK の開始。
+/// 同意フォームは AdMob の管理画面で作ったメッセージを出すもので、
+/// EEA など必要な地域でだけ表示される。
 enum Ads {
-    /// トラッキングの確認を出してから広告 SDK を始める。
-    ///
-    /// 断られても広告自体は出る（IDFA を使わない配信になる）ので、結果に関わらず SDK は開始する。
     @MainActor
     static func start() async {
+        await gatherConsent()
         await requestTrackingIfNeeded()
+
+        // 同意が得られていない状態では広告を要求しない。
+        guard ConsentInformation.shared.canRequestAds else { return }
         await MobileAds.shared.start()
+    }
+
+    /// 同意の状態を取り直し、必要ならフォームを出す。
+    @MainActor
+    private static func gatherConsent() async {
+        let parameters = RequestParameters()
+        // 子ども向けではないので、その旨は指定しない（既定のまま）。
+
+        do {
+            try await ConsentInformation.shared.requestConsentInfoUpdate(with: parameters)
+            try await ConsentForm.loadAndPresentIfRequired(from: rootViewController)
+        } catch {
+            // フォームが出せなくても、広告を出せる状態なら続行する。
+        }
     }
 
     /// まだ確認していなければ ATT の確認を出す。
@@ -25,5 +45,15 @@ enum Ads {
             try? await Task.sleep(for: .milliseconds(100))
         }
         _ = await ATTrackingManager.requestTrackingAuthorization()
+    }
+
+    /// 同意フォームを載せる画面。
+    @MainActor
+    private static var rootViewController: UIViewController? {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first { $0.isKeyWindow }?
+            .rootViewController
     }
 }

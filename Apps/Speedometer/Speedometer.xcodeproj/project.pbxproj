@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
         AA0000000000000000000012 /* SpeedometerCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000011 /* SpeedometerCore */; };
         AA0000000000000000000022 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000021 /* GoogleMobileAds */; };
+        AA0000000000000000000024 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000023 /* GoogleUserMessagingPlatform */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
             files = (
                 AA0000000000000000000012 /* SpeedometerCore in Frameworks */,
                 AA0000000000000000000022 /* GoogleMobileAds in Frameworks */,
+                AA0000000000000000000024 /* GoogleUserMessagingPlatform in Frameworks */,
             );
             runOnlyForDeploymentPostprocessing = 0;
         };
@@ -70,6 +72,7 @@
             packageProductDependencies = (
                 AA0000000000000000000011 /* SpeedometerCore */,
                 AA0000000000000000000021 /* GoogleMobileAds */,
+                AA0000000000000000000023 /* GoogleUserMessagingPlatform */,
             );
             productName = Speedometer;
             productReference = AA0000000000000000000003 /* Speedometer.app */;
@@ -103,6 +106,7 @@
             packageReferences = (
                 AA0000000000000000000010 /* XCLocalSwiftPackageReference "../../Packages/SpeedometerCore" */,
                 AA0000000000000000000020 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+                AA0000000000000000000025 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
             );
             preferredProjectObjectVersion = 77;
             productRefGroup = AA0000000000000000000005 /* Products */;
@@ -321,6 +325,14 @@
                 minimumVersion = 12.0.0;
             };
         };
+        AA0000000000000000000025 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
+            isa = XCRemoteSwiftPackageReference;
+            repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
+            requirement = {
+                kind = upToNextMajorVersion;
+                minimumVersion = 3.0.0;
+            };
+        };
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -332,6 +344,11 @@
             isa = XCSwiftPackageProductDependency;
             package = AA0000000000000000000020 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
             productName = GoogleMobileAds;
+        };
+        AA0000000000000000000023 /* GoogleUserMessagingPlatform */ = {
+            isa = XCSwiftPackageProductDependency;
+            package = AA0000000000000000000025 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
+            productName = GoogleUserMessagingPlatform;
         };
 /* End XCSwiftPackageProductDependency section */
     };

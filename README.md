@@ -162,8 +162,11 @@ Google Mobile Ads SDK を Swift Package Manager で入れています
 - 広告の計測に使う `SKAdNetworkItems`（50 件）は Google の案内どおり `Info.plist` に入れてある。
   一覧は増えることがあるので、配信前に
   [Privacy strategies](https://developers.google.com/admob/ios/privacy/strategies) を見て追記する
-- ATT（トラッキングの許可）に対応済み。起動してアプリが前面に出てから 1 度だけ確認を出し、
-  結果に関わらず広告 SDK を開始する（断られた場合は広告識別子を使わない配信になる）
+- 起動時の流れは 同意フォーム（UMP）→ ATT の確認 → 広告 SDK の開始。
+  同意が得られていない状態では広告を要求しない
+- 同意フォームは AdMob 管理画面で作ったメッセージを出すもので、EEA など必要な地域でのみ表示される。
+  日本で起動しても出ないのが正常
+- ATT は断られても広告自体は出る（広告識別子を使わない配信になる）
 
 ## App Store に出す前の共通の準備
 
@@ -180,5 +183,4 @@ Google Mobile Ads SDK を Swift Package Manager で入れています
 
 - App Store Connect の「アプリのプライバシー」の回答。広告 SDK が集めるデータ（端末 ID など）は
   アプリ側のマニフェストではなくこの質問票で申告する必要がある（Speedometer / TimeZONE）
-- EEA 向けの同意フォーム（Google の UMP）。AdMob 管理画面での設定と SDK 側の実装が必要
 - SiteRecord の買い切り商品 `com.example.siterecord.unlock` の App Store Connect への登録
