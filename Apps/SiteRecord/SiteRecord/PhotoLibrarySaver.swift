@@ -1,5 +1,6 @@
 import Photos
 import UIKit
+import UniformTypeIdentifiers
 
 enum PhotoLibraryError: LocalizedError {
     case denied
@@ -16,10 +17,25 @@ enum PhotoLibrarySaver {
         guard status == .authorized || status == .limited else {
             throw PhotoLibraryError.denied
         }
-        try await PHPhotoLibrary.shared().performChanges {
-            let request = PHAssetCreationRequest.forAsset()
-            // EXIF ごと保存したいので、UIImage ではなく書き出し済みのデータを渡す。
-            request.addResource(with: .photo, data: data, options: nil)
+
+        // データを直接渡すと写真アプリ側で再エンコードされ、EXIF と GPS が落ちる。
+        // 一時ファイルにしてから渡すと、書き出したバイト列がそのまま資産になる。
+        let url = FileManager.default.temporaryDirectory
+            .appending(path: "capture-\(UUID().uuidString).jpg")
+        try data.write(to: url)
+
+        do {
+            try await PHPhotoLibrary.shared().performChanges {
+                let request = PHAssetCreationRequest.forAsset()
+                let options = PHAssetResourceCreationOptions()
+                // 取り込み後に一時ファイルを残さない。
+                options.shouldMoveFile = true
+                options.uniformTypeIdentifier = UTType.jpeg.identifier
+                request.addResource(with: .photo, fileURL: url, options: options)
+            }
+        } catch {
+            try? FileManager.default.removeItem(at: url)
+            throw error
         }
     }
 
