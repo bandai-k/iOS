@@ -245,41 +245,42 @@ final class CaptureQuotaTests: XCTestCase {
 
     private func quota() -> CaptureQuota { .empty(at: morning, calendar: calendar) }
 
-    func testThreeFreeCapturesPerDay() {
+    func testFreeCapturesRunOutAfterTheDailyLimit() {
+        let limit = CaptureQuota.freeDailyLimit
         var quota = quota()
-        XCTAssertEqual(quota.remaining(at: morning, calendar: calendar), 3)
+        XCTAssertEqual(quota.remaining(at: morning, calendar: calendar), limit)
 
-        for expected in [2, 1, 0] {
+        for taken in 1...limit {
             XCTAssertTrue(quota.allowsCapture(at: morning, calendar: calendar))
             quota = quota.recording(at: morning, calendar: calendar)
-            XCTAssertEqual(quota.remaining(at: morning, calendar: calendar), expected)
+            XCTAssertEqual(quota.remaining(at: morning, calendar: calendar), limit - taken)
         }
-        XCTAssertFalse(quota.allowsCapture(at: morning, calendar: calendar), "4 枚目は無料では撮れない")
+        XCTAssertFalse(quota.allowsCapture(at: morning, calendar: calendar), "上限を超えた分は無料では撮れない")
     }
 
     func testCountResetsNextDay() {
         var quota = quota()
-        for _ in 0..<3 { quota = quota.recording(at: morning, calendar: calendar) }
+        for _ in 0..<CaptureQuota.freeDailyLimit { quota = quota.recording(at: morning, calendar: calendar) }
         XCTAssertFalse(quota.allowsCapture(at: morning, calendar: calendar))
 
         // 同じ日の深夜 23:59 はまだ数え直さない。
         let lateNight = morning.addingTimeInterval(14 * 3600 + 59 * 60)
         XCTAssertEqual(quota.remaining(at: lateNight, calendar: calendar), 0)
 
-        // 日付が変わればまた 3 枚。
+        // 日付が変わればまた上限まで撮れる。
         let nextDay = morning.addingTimeInterval(24 * 3600)
-        XCTAssertEqual(quota.remaining(at: nextDay, calendar: calendar), 3)
+        XCTAssertEqual(quota.remaining(at: nextDay, calendar: calendar), CaptureQuota.freeDailyLimit)
         XCTAssertTrue(quota.allowsCapture(at: nextDay, calendar: calendar))
     }
 
     func testRecordingAfterMidnightStartsFromOne() {
         var quota = quota()
-        for _ in 0..<3 { quota = quota.recording(at: morning, calendar: calendar) }
+        for _ in 0..<CaptureQuota.freeDailyLimit { quota = quota.recording(at: morning, calendar: calendar) }
 
         let nextDay = morning.addingTimeInterval(24 * 3600)
         quota = quota.recording(at: nextDay, calendar: calendar)
         XCTAssertEqual(quota.count, 1)
-        XCTAssertEqual(quota.remaining(at: nextDay, calendar: calendar), 2)
+        XCTAssertEqual(quota.remaining(at: nextDay, calendar: calendar), CaptureQuota.freeDailyLimit - 1)
     }
 
     func testStoreRoundTripAndDailyReset() {

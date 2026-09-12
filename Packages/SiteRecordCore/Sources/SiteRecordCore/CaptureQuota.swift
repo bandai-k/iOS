@@ -2,11 +2,11 @@ import Foundation
 
 /// 無料で撮れる残り枚数の管理。
 ///
-/// 1 日 3 枚までは無料で、日付が変わればまた 3 枚撮れる。
+/// 1 日 2 枚までは無料で、日付が変わればまた 2 枚撮れる。
 /// 判定に使う「今日」は端末のカレンダー基準なので、時計を外から渡せるようにしてある。
 public struct CaptureQuota: Equatable, Codable, Sendable {
     /// 1 日に無料で撮れる枚数。
-    public static let freeDailyLimit = 3
+    public static let freeDailyLimit = 2
 
     /// 数え始めた日 (その日の 0 時)。
     public var day: Date

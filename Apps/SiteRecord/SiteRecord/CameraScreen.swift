@@ -204,7 +204,9 @@ struct CameraScreen: View {
             }
         }
         .disabled(camera.status != .ready || isSaving)
-        .opacity(camera.status == .ready && canCapture ? 1 : 0.4)
+        // 無料枠を使い切っていても押せるままにする。押すと購入画面が出るので、
+        // 押せない見た目にすると「何も起きないボタン」に見えてしまう。
+        .opacity(camera.status == .ready ? 1 : 0.4)
         .frame(maxWidth: .infinity)
         .accessibilityLabel("撮影")
     }
