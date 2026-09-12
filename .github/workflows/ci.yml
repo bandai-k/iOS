@@ -27,4 +27,4 @@ jobs:
         app: [TimeZONE, SiteRecord, Sengiri, Speedometer]
     steps:
       - uses: actions/checkout@v4
-      - run: make build APP=${{ matrix.app }} DESTINATION='platform=iOS Simulator,name=iPhone 16'
+      - run: make build APP=${{ matrix.app }}

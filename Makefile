@@ -5,7 +5,8 @@
 #   make test             … 共有パッケージのテストを全部実行
 
 APP ?= TimeZONE
-DESTINATION ?= platform=iOS Simulator,name=iPhone 16
+# 特定の機種名を書くと、その機種のシミュレータが無い環境でビルドが落ちる。
+DESTINATION ?= generic/platform=iOS Simulator
 
 APPS := $(notdir $(patsubst %/,%,$(wildcard Apps/*/)))
 PACKAGES := $(patsubst %/,%,$(wildcard Packages/*/))
