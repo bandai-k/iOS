@@ -158,5 +158,7 @@ Google Mobile Ads SDK を Swift Package Manager で入れています
   - 広告ユニット ID: `AdBannerView.testUnitID`
 - `GADApplicationIdentifier` は `GENERATE_INFOPLIST_FILE` が知らないキーなので、
   `INFOPLIST_FILE` で指定した `Info.plist` に書いている（生成される他のキーとは自動で合成される）
-- 本番配信前には、AdMob の案内にある `SKAdNetworkItems` の追加と、必要なら ATT
-  （`NSUserTrackingUsageDescription`）の対応が別途必要
+- 広告の計測に使う `SKAdNetworkItems`（50 件）は Google の案内どおり `Info.plist` に入れてある。
+  一覧は増えることがあるので、配信前に
+  [Privacy strategies](https://developers.google.com/admob/ios/privacy/strategies) を見て追記する
+- ATT（`NSUserTrackingUsageDescription`）はまだ入れていない。パーソナライズ広告を出すなら別途必要
