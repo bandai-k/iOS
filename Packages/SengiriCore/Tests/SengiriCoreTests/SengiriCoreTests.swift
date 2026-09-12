@@ -4,8 +4,18 @@ import XCTest
 final class ChopSessionTests: XCTestCase {
     private let start = Date(timeIntervalSince1970: 1_000_000)
 
+    /// 目標回数は `ChopRules.cutCountRange` に丸められるので、テストも範囲内の値を使う。
+    private let target = ChopRules.cutCountRange.lowerBound
+
+    /// 目標の手前まで刻む。最後の 1 回は各テストが時刻を指定して打つ。
+    private func cutUntilOneLeft(_ session: inout ChopSession, at date: Date) {
+        for _ in 0..<(target - 1) {
+            session.cut(at: date)
+        }
+    }
+
     func testClockStartsOnFirstCut() {
-        var session = ChopSession(vegetable: .cabbage, target: 3)
+        var session = ChopSession(vegetable: .cabbage, target: target)
         XCTAssertFalse(session.hasStarted)
         XCTAssertEqual(session.elapsed(at: start.addingTimeInterval(5)), 0)
 
@@ -16,10 +26,12 @@ final class ChopSessionTests: XCTestCase {
     }
 
     func testFinishesAtTargetAndFreezesTime() {
-        var session = ChopSession(vegetable: .cucumber, target: 3)
+        var session = ChopSession(vegetable: .cucumber, target: target)
         session.cut(at: start)
-        session.cut(at: start.addingTimeInterval(0.5))
-        XCTAssertFalse(session.isFinished)
+        for _ in 0..<(target - 2) {
+            session.cut(at: start.addingTimeInterval(0.5))
+        }
+        XCTAssertFalse(session.isFinished, "目標の 1 回手前ではまだ終わらない")
 
         session.cut(at: start.addingTimeInterval(1.25))
         XCTAssertTrue(session.isFinished)
@@ -29,22 +41,27 @@ final class ChopSessionTests: XCTestCase {
     }
 
     func testCutsAfterFinishAreIgnored() {
-        var session = ChopSession(vegetable: .carrot, target: 2)
+        var session = ChopSession(vegetable: .carrot, target: target)
         session.cut(at: start)
-        session.cut(at: start.addingTimeInterval(1))
+        cutUntilOneLeft(&session, at: start.addingTimeInterval(1))
+        XCTAssertEqual(session.cutCount, target)
+        XCTAssertTrue(session.isFinished)
+
         session.cut(at: start.addingTimeInterval(2))
-        XCTAssertEqual(session.cutCount, 2)
-        XCTAssertEqual(session.result ?? -1, 1, accuracy: 0.0001)
+        XCTAssertEqual(session.cutCount, target, "終了後のタップは数に入らない")
+        XCTAssertEqual(session.result ?? -1, 1, accuracy: 0.0001, "確定タイムも動かない")
     }
 
     func testProgressAndRemaining() {
-        var session = ChopSession(vegetable: .cabbage, target: 4)
+        var session = ChopSession(vegetable: .cabbage, target: target)
         XCTAssertEqual(session.progress, 0)
-        XCTAssertEqual(session.remaining, 4)
-        session.cut(at: start)
-        session.cut(at: start)
+        XCTAssertEqual(session.remaining, target)
+
+        for _ in 0..<(target / 2) {
+            session.cut(at: start)
+        }
         XCTAssertEqual(session.progress, 0.5)
-        XCTAssertEqual(session.remaining, 2)
+        XCTAssertEqual(session.remaining, target / 2)
     }
 
     func testTargetIsClampedToRules() {
