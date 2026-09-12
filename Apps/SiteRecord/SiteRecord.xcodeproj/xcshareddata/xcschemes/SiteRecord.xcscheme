@@ -23,15 +23,26 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
+      StoreKitConfigurationFileReference = "../../../SiteRecordTests/Products.storekit"
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BB0000000000000000000030"
+               BuildableName = "SiteRecordTests.xctest"
+               BlueprintName = "SiteRecordTests"
+               ReferencedContainer = "container:SiteRecord.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
-      StoreKitConfigurationFileReference = "../../../Products.storekit"
+      StoreKitConfigurationFileReference = "../../../SiteRecordTests/Products.storekit"
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"

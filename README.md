@@ -103,9 +103,14 @@ make test                 # 共有パッケージのテストを全部実行
 - 残り枚数はカメラ画面の左上に出る
 
 商品 ID は `com.example.siterecord.unlock`（買い切り / 非消耗型）。App Store Connect に
-登録するまでは価格を取得できないので、手元で試すときは Xcode から実行してください。
-スキームに `Apps/SiteRecord/Products.storekit` を紐付けてあるので、Xcode 実行時は
-その設定で購入まで通せます（`xcrun simctl` で起動した場合は price が出ません）。
+登録するまでは価格を取得できないので、手元で試すときは **Xcode から実行**してください。
+スキームに `Apps/SiteRecord/SiteRecordTests/Products.storekit` を紐付けてあるので、
+Xcode 実行時はその設定で購入まで通せます。
+
+購入まわりのテストは `Apps/SiteRecord/SiteRecordTests` にあります（`SKTestSession` で
+購入・復元・返金・再起動後の状態を確認）。ただし **`xcodebuild` から実行すると
+StoreKit のテスト構成が適用されず**（`SKTestSession` が "Error saving configuration file" を返す）、
+その場合はテストが自動でスキップされます。実際に検証するときは Xcode の Test で実行してください。
 
 実機でのみ動作します（シミュレータにはカメラが無いため、起動しても案内表示になります）。
 初回起動時にカメラと写真追加の許可を求めます。

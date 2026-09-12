@@ -12,10 +12,12 @@
 
 /* Begin PBXFileReference section */
         BB0000000000000000000003 /* SiteRecord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SiteRecord.app; sourceTree = BUILT_PRODUCTS_DIR; };
+        BB0000000000000000000031 /* SiteRecordTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SiteRecordTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
         BB0000000000000000000006 /* SiteRecord */ = {isa = PBXFileSystemSynchronizedRootGroup; path = SiteRecord; sourceTree = "<group>"; };
+        BB0000000000000000000032 /* SiteRecordTests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = SiteRecordTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +29,13 @@
             );
             runOnlyForDeploymentPostprocessing = 0;
         };
+        BB0000000000000000000034 /* Frameworks */ = {
+            isa = PBXFrameworksBuildPhase;
+            buildActionMask = 2147483647;
+            files = (
+            );
+            runOnlyForDeploymentPostprocessing = 0;
+        };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -34,6 +43,7 @@
             isa = PBXGroup;
             children = (
                 BB0000000000000000000006 /* SiteRecord */,
+                BB0000000000000000000032 /* SiteRecordTests */,
                 BB0000000000000000000005 /* Products */,
             );
             sourceTree = "<group>";
@@ -42,6 +52,7 @@
             isa = PBXGroup;
             children = (
                 BB0000000000000000000003 /* SiteRecord.app */,
+                BB0000000000000000000031 /* SiteRecordTests.xctest */,
             );
             name = Products;
             sourceTree = "<group>";
@@ -72,7 +83,46 @@
             productReference = BB0000000000000000000003 /* SiteRecord.app */;
             productType = "com.apple.product-type.application";
         };
+        BB0000000000000000000030 /* SiteRecordTests */ = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = BB0000000000000000000036 /* Build configuration list for PBXNativeTarget "SiteRecordTests" */;
+            buildPhases = (
+                BB0000000000000000000033 /* Sources */,
+                BB0000000000000000000034 /* Frameworks */,
+                BB0000000000000000000035 /* Resources */,
+            );
+            buildRules = (
+            );
+            dependencies = (
+                BB000000000000000000003A /* PBXTargetDependency */,
+            );
+            fileSystemSynchronizedGroups = (
+                BB0000000000000000000032 /* SiteRecordTests */,
+            );
+            name = SiteRecordTests;
+            productName = SiteRecordTests;
+            productReference = BB0000000000000000000031 /* SiteRecordTests.xctest */;
+            productType = "com.apple.product-type.bundle.unit-test";
+        };
 /* End PBXNativeTarget section */
+
+/* Begin PBXContainerItemProxy section */
+        BB000000000000000000003B /* PBXContainerItemProxy */ = {
+            isa = PBXContainerItemProxy;
+            containerPortal = BB0000000000000000000001 /* Project object */;
+            proxyType = 1;
+            remoteGlobalIDString = BB0000000000000000000002;
+            remoteInfo = SiteRecord;
+        };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+        BB000000000000000000003A /* PBXTargetDependency */ = {
+            isa = PBXTargetDependency;
+            target = BB0000000000000000000002 /* SiteRecord */;
+            targetProxy = BB000000000000000000003B /* PBXContainerItemProxy */;
+        };
+/* End PBXTargetDependency section */
 
 /* Begin PBXProject section */
         BB0000000000000000000001 /* Project object */ = {
@@ -106,6 +156,7 @@
             projectRoot = "";
             targets = (
                 BB0000000000000000000002 /* SiteRecord */,
+                BB0000000000000000000030 /* SiteRecordTests */,
             );
         };
 /* End PBXProject section */
@@ -118,10 +169,24 @@
             );
             runOnlyForDeploymentPostprocessing = 0;
         };
+        BB0000000000000000000035 /* Resources */ = {
+            isa = PBXResourcesBuildPhase;
+            buildActionMask = 2147483647;
+            files = (
+            );
+            runOnlyForDeploymentPostprocessing = 0;
+        };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
         BB0000000000000000000007 /* Sources */ = {
+            isa = PBXSourcesBuildPhase;
+            buildActionMask = 2147483647;
+            files = (
+            );
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+        BB0000000000000000000033 /* Sources */ = {
             isa = PBXSourcesBuildPhase;
             buildActionMask = 2147483647;
             files = (
@@ -282,6 +347,40 @@
             };
             name = Release;
         };
+        BB0000000000000000000037 /* Debug */ = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                BUNDLE_LOADER = "$(TEST_HOST)";
+                CODE_SIGN_STYLE = Automatic;
+                CURRENT_PROJECT_VERSION = 1;
+                GENERATE_INFOPLIST_FILE = YES;
+                IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+                MARKETING_VERSION = 1.0;
+                PRODUCT_BUNDLE_IDENTIFIER = com.example.siterecord.tests;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SWIFT_VERSION = 5.0;
+                TARGETED_DEVICE_FAMILY = "1,2";
+                TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SiteRecord.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SiteRecord";
+            };
+            name = Debug;
+        };
+        BB0000000000000000000038 /* Release */ = {
+            isa = XCBuildConfiguration;
+            buildSettings = {
+                BUNDLE_LOADER = "$(TEST_HOST)";
+                CODE_SIGN_STYLE = Automatic;
+                CURRENT_PROJECT_VERSION = 1;
+                GENERATE_INFOPLIST_FILE = YES;
+                IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+                MARKETING_VERSION = 1.0;
+                PRODUCT_BUNDLE_IDENTIFIER = com.example.siterecord.tests;
+                PRODUCT_NAME = "$(TARGET_NAME)";
+                SWIFT_VERSION = 5.0;
+                TARGETED_DEVICE_FAMILY = "1,2";
+                TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SiteRecord.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SiteRecord";
+            };
+            name = Release;
+        };
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -299,6 +398,15 @@
             buildConfigurations = (
                 BB000000000000000000000E /* Debug */,
                 BB000000000000000000000F /* Release */,
+            );
+            defaultConfigurationIsVisible = 0;
+            defaultConfigurationName = Release;
+        };
+        BB0000000000000000000036 /* Build configuration list for PBXNativeTarget "SiteRecordTests" */ = {
+            isa = XCConfigurationList;
+            buildConfigurations = (
+                BB0000000000000000000037 /* Debug */,
+                BB0000000000000000000038 /* Release */,
             );
             defaultConfigurationIsVisible = 0;
             defaultConfigurationName = Release;
