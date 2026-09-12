@@ -2,12 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- 他社に渡して広告などに使う「トラッキング」はしていない。 -->
+	<!-- 広告のために ATT の許可を求め、許可されれば広告識別子が使われる。 -->
 	<key>NSPrivacyTracking</key>
-	<false/>
+	<true/>
+	<!-- 通信するのは広告 SDK であり、SDK 自身のマニフェストに宣言されている。
+	     アプリのコードが直接つなぐトラッキング用のドメインは無い。 -->
 	<key>NSPrivacyTrackingDomains</key>
 	<array/>
-	<!-- アプリ自身が集めて外に送るデータは無い。端末の中だけで完結する。 -->
+	<!-- アプリのコード自身が集めて外に送るデータは無い。広告 SDK が集めるものは
+	     SDK 側のマニフェストと、App Store Connect の質問票で申告する。 -->
 	<key>NSPrivacyCollectedDataTypes</key>
 	<array/>
 	<key>NSPrivacyAccessedAPITypes</key>

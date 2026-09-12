@@ -7,6 +7,9 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<!-- AdMob のアプリ ID。GENERATE_INFOPLIST_FILE が知らないキーなので、ここに書く。 -->
+	<!-- ATT の確認に出す説明文。 -->
+	<key>NSUserTrackingUsageDescription</key>
+	<string>関心に合った広告を表示するために、端末の広告識別子を使います。</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-6037710903474110~4045272891</string>
 	<!-- 広告の計測に使う SKAdNetwork の ID。Google が案内している一覧をそのまま入れている。
