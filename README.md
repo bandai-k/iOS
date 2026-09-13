@@ -197,7 +197,7 @@ Google Mobile Ads SDK を Swift Package Manager で入れています
 - 一覧: https://bandai-k.github.io/iOS/privacy/
 - App Store と AdMob には、アプリごとのページの URL を登録する
 
-**最終的には Nebulab のホームページへ移設する予定**です。移設したら、この 2 か所の URL を
+**最終的には Nebulab（nebulab.jp）のホームページへ移設する予定**です。移設したら、この 2 か所の URL を
 忘れずに差し替えてください。
 
 1. App Store Connect の「App のプライバシー」＞プライバシーポリシー URL
