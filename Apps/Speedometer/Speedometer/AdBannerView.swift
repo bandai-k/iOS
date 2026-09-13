@@ -41,8 +41,13 @@ struct AdBannerView: UIViewRepresentable {
 /// バナーの定位置。高さを固定しておき、読み込み前でも画面が動かないようにする。
 struct AdBannerSlot: View {
     var body: some View {
-        AdBannerView()
-            .frame(height: 50)
-            .frame(maxWidth: .infinity)
+        if ScreenshotMode.isActive {
+            // 撮影中は枠ごと出さない。
+            EmptyView()
+        } else {
+            AdBannerView()
+                .frame(height: 50)
+                .frame(maxWidth: .infinity)
+        }
     }
 }

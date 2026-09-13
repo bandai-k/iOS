@@ -11,6 +11,9 @@ import UserMessagingPlatform
 enum Ads {
     @MainActor
     static func start() async {
+        // スクリーンショット撮影中は広告も確認ダイアログも出さない。
+        guard !ScreenshotMode.isActive else { return }
+
         await gatherConsent()
         await requestTrackingIfNeeded()
 
