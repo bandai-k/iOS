@@ -1,3 +1,4 @@
+import BannerAds
 import ClockCore
 import SwiftUI
 
@@ -45,7 +46,7 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity)
                 }
 
-                AdBannerSlot()
+                AdBannerSlot(unitID: AdUnits.banner)
             }
         }
         .task {

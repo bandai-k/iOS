@@ -8,9 +8,9 @@ import UserMessagingPlatform
 /// 手順は Google の案内どおり、同意フォーム → ATT の確認 → 広告 SDK の開始。
 /// 同意フォームは AdMob の管理画面で作ったメッセージを出すもので、
 /// EEA など必要な地域でだけ表示される。
-enum Ads {
+public enum Ads {
     @MainActor
-    static func start() async {
+    public static func start() async {
         // スクリーンショット撮影中は広告も確認ダイアログも出さない。
         guard !ScreenshotMode.isActive else { return }
 

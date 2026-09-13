@@ -8,8 +8,7 @@
 
 /* Begin PBXBuildFile section */
         AA0000000000000000000012 /* ClockCore in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000011 /* ClockCore */; };
-        AA0000000000000000000022 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000021 /* GoogleMobileAds */; };
-        AA0000000000000000000024 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000023 /* GoogleUserMessagingPlatform */; };
+        AA0000000000000000000022 /* BannerAds in Frameworks */ = {isa = PBXBuildFile; productRef = AA0000000000000000000021 /* BannerAds */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,8 +25,7 @@
             buildActionMask = 2147483647;
             files = (
                 AA0000000000000000000012 /* ClockCore in Frameworks */,
-                AA0000000000000000000022 /* GoogleMobileAds in Frameworks */,
-                AA0000000000000000000024 /* GoogleUserMessagingPlatform in Frameworks */,
+                AA0000000000000000000022 /* BannerAds in Frameworks */,
             );
             runOnlyForDeploymentPostprocessing = 0;
         };
@@ -71,8 +69,7 @@
             name = TimeZONE;
             packageProductDependencies = (
                 AA0000000000000000000011 /* ClockCore */,
-                AA0000000000000000000021 /* GoogleMobileAds */,
-                AA0000000000000000000023 /* GoogleUserMessagingPlatform */,
+                AA0000000000000000000021 /* BannerAds */,
             );
             productName = TimeZONE;
             productReference = AA0000000000000000000003 /* TimeZONE.app */;
@@ -105,8 +102,7 @@
             minimizedProjectReferenceProxies = 1;
             packageReferences = (
                 AA0000000000000000000010 /* XCLocalSwiftPackageReference "../../Packages/ClockCore" */,
-                AA0000000000000000000020 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
-                AA0000000000000000000025 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
+                AA0000000000000000000026 /* XCLocalSwiftPackageReference "../../Packages/BannerAds" */,
             );
             preferredProjectObjectVersion = 77;
             productRefGroup = AA0000000000000000000005 /* Products */;
@@ -314,41 +310,20 @@
             isa = XCLocalSwiftPackageReference;
             relativePath = ../../Packages/ClockCore;
         };
+        AA0000000000000000000026 /* XCLocalSwiftPackageReference "../../Packages/BannerAds" */ = {
+            isa = XCLocalSwiftPackageReference;
+            relativePath = ../../Packages/BannerAds;
+        };
 /* End XCLocalSwiftPackageReference section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-        AA0000000000000000000020 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
-            isa = XCRemoteSwiftPackageReference;
-            repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
-            requirement = {
-                kind = upToNextMajorVersion;
-                minimumVersion = 12.0.0;
-            };
-        };
-        AA0000000000000000000025 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
-            isa = XCRemoteSwiftPackageReference;
-            repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
-            requirement = {
-                kind = upToNextMajorVersion;
-                minimumVersion = 3.0.0;
-            };
-        };
-/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
         AA0000000000000000000011 /* ClockCore */ = {
             isa = XCSwiftPackageProductDependency;
             productName = ClockCore;
         };
-        AA0000000000000000000021 /* GoogleMobileAds */ = {
+        AA0000000000000000000021 /* BannerAds */ = {
             isa = XCSwiftPackageProductDependency;
-            package = AA0000000000000000000020 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
-            productName = GoogleMobileAds;
-        };
-        AA0000000000000000000023 /* GoogleUserMessagingPlatform */ = {
-            isa = XCSwiftPackageProductDependency;
-            package = AA0000000000000000000025 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
-            productName = GoogleUserMessagingPlatform;
+            productName = BannerAds;
         };
 /* End XCSwiftPackageProductDependency section */
     };

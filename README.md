@@ -15,6 +15,7 @@ Packages/             アプリ間で共有する Swift Package
   SiteRecordCore/     看板の項目・保存・撮影日時フォーマット（ロジック + テスト）
   SengiriCore/        千切りゲームのルール・記録・タイム計測（ロジック + テスト）
   SpeedometerCore/    速度の換算とメーターの目盛り計算（ロジック + テスト）
+  BannerAds/          広告バナーと同意まわり（iOS 専用・テストなし）
 docs/                 運用メモ
 Makefile              ビルド / テストのショートカット
 ```
@@ -153,14 +154,16 @@ StoreKit のテスト構成が適用されず**（`SKTestSession` が "Error sav
 
 ## 広告について（Speedometer / TimeZONE）
 
-Google Mobile Ads SDK を Swift Package Manager で入れています
-（`https://github.com/googleads/swift-package-manager-google-mobile-ads.git`）。
+広告まわりは `Packages/BannerAds` にまとめてあり、2 つのアプリがこれを使っています。
+Google Mobile Ads SDK と UMP SDK への依存もこのパッケージが持ちます。
+広告 SDK が iOS 専用なので、このパッケージは macOS ではビルドできません。
+`make test` は Tests ディレクトリを持つパッケージだけを対象にするので、ここは飛ばされます。
 
 - バナーは画面下に固定。高さ 50pt を先に確保してあるので、広告の読み込み前後で画面が動かない
 - アプリ ID・広告ユニット ID とも AdMob で発行した本番の値が入っている
   - アプリ ID: 各アプリの `Info.plist` の `GADApplicationIdentifier`
-  - 広告ユニット ID: `AdBannerView.unitID`
-- 広告の中身を出さずに動作だけ見たいときは `AdBannerView(unitID: AdBannerView.testUnitID)` を使う
+  - 広告ユニット ID: 各アプリの `AdUnits.banner`
+- 広告の中身を出さずに動作だけ見たいときは `AdBannerSlot(unitID: AdBannerView.testUnitID)` を使う
   （テスト用 ID は残してある）。実機で本番 ID のまま自分で表示・タップし続けると無効なトラフィックになる
 - `GADApplicationIdentifier` は `GENERATE_INFOPLIST_FILE` が知らないキーなので、
   `INFOPLIST_FILE` で指定した `Info.plist` に書いている（生成される他のキーとは自動で合成される）

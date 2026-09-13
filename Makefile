@@ -28,8 +28,13 @@ build:
 	  -destination "$(DESTINATION)" \
 	  build
 
+# Tests ディレクトリを持つパッケージだけを対象にする。
+# iOS 専用のパッケージ (BannerAds など) は macOS でビルドできず、テストも持たない。
 test:
-	@for p in $(PACKAGES); do echo "==> $$p"; swift test --package-path $$p || exit 1; done
+	@for p in $(PACKAGES); do \
+	  if [ -d "$$p/Tests" ]; then echo "==> $$p"; swift test --package-path $$p || exit 1; \
+	  else echo "==> $$p (テストなし・スキップ)"; fi; \
+	done
 
 clean:
 	rm -rf build

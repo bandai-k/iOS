@@ -1,3 +1,4 @@
+import BannerAds
 import SwiftUI
 
 @main

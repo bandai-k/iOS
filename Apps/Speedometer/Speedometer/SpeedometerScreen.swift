@@ -1,3 +1,4 @@
+import BannerAds
 import SpeedometerCore
 import SwiftUI
 
@@ -49,7 +50,7 @@ struct SpeedometerScreen: View {
 
                 status
 
-                AdBannerSlot()
+                AdBannerSlot(unitID: AdUnits.banner)
             }
             .padding(.top, 24)
             .padding(.bottom, 8)
